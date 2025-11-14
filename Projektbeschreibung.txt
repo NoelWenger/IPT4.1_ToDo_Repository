@@ -1,0 +1,16 @@
+Mein Projekt ist ein Mini To-Do Manager, mit dem verschieden Benutzer ihre Aufgaben einfach verwalten, Kategorien zuordnen und Prioritäten setzten können.
+
+
+Die Datenbank besteht aus vier Tabellen:
+
+User
+Enthält Informationen zu den Benutzern.
+
+Category
+Beinhaltet verschiedene Kategorien wie „Schule“, „Haushalt“ oder „Privat“, um Aufgaben zu organisieren.
+
+Priority
+Definiert die Wichtigkeit einer Aufgabe „Hoch“, „Mittel“, „Niedrig“.
+
+Task
+Speichert die eigentlichen Aufgaben mit Titel, Beschreibung, Fälligkeitsdatum, Status (erledigt oder nicht) und Verknüpfungen zu Benutzer, Kategorie und Priorität.
