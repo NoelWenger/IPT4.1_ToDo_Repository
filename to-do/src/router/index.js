@@ -6,7 +6,8 @@ import TaskFormView from '../views/TaskFormView.vue';
 const routes = [
     { path: '/', component: LoginView },
     { path: '/dashboard', component: DashboardView },
-    { path: '/add-task', component: TaskFormView }
+    { path: '/add-task', component: TaskFormView },
+    { path: '/edit-task/:id', component: TaskFormView },
 ];
 
 const router = createRouter({
