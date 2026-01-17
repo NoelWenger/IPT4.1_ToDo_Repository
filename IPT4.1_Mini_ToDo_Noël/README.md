@@ -1,4 +1,4 @@
-# Mini-ToDo Manager - Noel Wenger
+# Mini-ToDo Manager - Noël Wenger
 
 ## Projektbeschreibung
 Mein Projekt ist ein moderner To-Do Manager, mit dem verschiedene Benutzer ihre Aufgaben einfach verwalten, Kategorien zuordnen und Prioritäten setzen können. Die Anwendung bietet eine übersichtliche Oberfläche mit Filterfunktionen und einer detaillierten Aufgabenansicht.
