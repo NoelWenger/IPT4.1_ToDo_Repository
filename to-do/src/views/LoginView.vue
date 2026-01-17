@@ -1,21 +1,3 @@
-<template>
-  <div class="login-container">
-    <div class="login-card">
-      <h2>{{ isRegisterMode ? 'Konto erstellen' : 'Mini-ToDo Login' }}</h2>
-      <input v-model="firstName" placeholder="Vorname" class="login-input" />
-      <input v-model="lastName" placeholder="Nachname" class="login-input" />
-
-      <button @click="handleAction" class="btn-primary">
-        {{ isRegisterMode ? 'Registrieren' : 'Login!' }}
-      </button>
-
-      <p class="toggle-link" @click="isRegisterMode = !isRegisterMode">
-        {{ isRegisterMode ? 'Doch lieber einloggen?' : 'Noch kein Konto? Hier registrieren' }}
-      </p>
-    </div>
-  </div>
-</template>
-
 <script setup>
 import { ref } from 'vue';
 import api from '@/api';
@@ -40,6 +22,24 @@ const handleAction = async () => {
   } catch (e) { alert("Fehler beim Login/Register"); }
 };
 </script>
+
+<template>
+  <div class="login-container">
+    <div class="login-card">
+      <h2>{{ isRegisterMode ? 'Konto erstellen' : 'Mini-ToDo Login' }}</h2>
+      <input v-model="firstName" placeholder="Vorname" class="login-input" />
+      <input v-model="lastName" placeholder="Nachname" class="login-input" />
+
+      <button @click="handleAction" class="btn-primary">
+        {{ isRegisterMode ? 'Registrieren' : 'Login!' }}
+      </button>
+
+      <p class="toggle-link" @click="isRegisterMode = !isRegisterMode">
+        {{ isRegisterMode ? 'Doch lieber einloggen?' : 'Noch kein Konto? Hier registrieren' }}
+      </p>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .login-container { height: 100vh; display: flex; justify-content: center; align-items: center; background: #e8eee9; }

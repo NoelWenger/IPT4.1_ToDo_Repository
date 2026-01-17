@@ -1,9 +1,3 @@
-<template>
-  <div id="app">
-    <router-view @login-success="setUser"></router-view>
-  </div>
-</template>
-
 <script setup>
 import { useRouter } from 'vue-router';
 
@@ -14,6 +8,12 @@ const setUser = (user) => {
   router.push('/dashboard');
 };
 </script>
+
+<template>
+  <div id="app">
+    <router-view @login-success="setUser"></router-view>
+  </div>
+</template>
 
 <style>
 body {

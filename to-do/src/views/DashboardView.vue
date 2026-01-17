@@ -8,10 +8,8 @@ const tasks = ref([]);
 const categories = ref([]);
 const user = ref({ first_name: "", last_name: "", users_id: null });
 
-// Zustand: Welche Task-ID ist gerade ausgeklappt?
 const expandedTaskId = ref(null);
 
-// --- FILTER ZUSTÄNDE ---
 const filterStatus = ref('offen');
 const filterPriority = ref('alle');
 const filterCategory = ref('alle');
@@ -38,7 +36,6 @@ const loadData = async () => {
   }
 };
 
-// --- DIE FILTER-LOGIK ---
 const filteredTasks = computed(() => {
   let result = [...tasks.value];
 
@@ -66,13 +63,12 @@ const filteredTasks = computed(() => {
   return result;
 });
 
-// --- FUNKTIONEN ---
 const toggleExpand = (id) => {
   expandedTaskId.value = expandedTaskId.value === id ? null : id;
 };
 
 const deleteTask = async (id) => {
-  if (confirm("Wirklich löschen?")) {
+  if (confirm("Möchtest du diese Aufgabe wirklich löschen?")) {
     await api.deleteTask(id);
     await loadData();
     expandedTaskId.value = null;
@@ -89,7 +85,6 @@ const logout = () => {
   router.push("/");
 };
 
-// Hilfsfunktionen für das neue Design
 const formatDate = (dateStr) => {
   if (!dateStr) return "";
   return new Date(dateStr).toLocaleDateString('de-CH', { day: '2-digit', month: 'short' });
@@ -103,7 +98,6 @@ const isOverdue = (dateStr) => {
 
 <template>
   <div class="app-wrapper">
-    <!-- Header mit Glass-Effekt -->
     <header class="glass-header">
       <div class="header-container">
         <div class="logo">
@@ -115,7 +109,7 @@ const isOverdue = (dateStr) => {
             <div class="user-avatar">{{ user.first_name?.charAt(0) }}</div>
             <span class="user-name">{{ user.first_name }} {{ user.last_name }}</span>
           </div>
-          <button @click="logout" class="logout-link">Logout</button>
+          <button @click="logout" class="btn-logout">Logout</button>
         </div>
       </div>
     </header>
@@ -127,7 +121,6 @@ const isOverdue = (dateStr) => {
         </button>
       </div>
 
-      <!-- Moderner Filter-Bereich -->
       <section class="filter-card">
         <div class="filter-grid">
           <div class="filter-group">
@@ -160,15 +153,15 @@ const isOverdue = (dateStr) => {
           </div>
 
           <div class="filter-group">
-            <label>Sortierung</label>
+            <label>Fällig am</label>
             <select v-model="sortOrder">
-              <option value="asc">Bald fällig</option>
-              <option value="desc">Später fällig</option>
+              <option value="asc">Bald fällig ↑</option>
+              <option value="desc">Später fällig ↓</option>
             </select>
           </div>
 
           <div class="filter-group checkbox-group">
-            <label>Nur {{ user.first_name }}</label>
+            <label>{{ user.first_name }}</label>
             <label class="switch">
               <input type="checkbox" v-model="filterOnlyMine">
               <span class="slider round"></span>
@@ -177,7 +170,6 @@ const isOverdue = (dateStr) => {
         </div>
       </section>
 
-      <!-- Task Liste -->
       <div class="task-container">
         <div v-for="task in filteredTasks" :key="task.task_id"
              class="task-card" :class="{ 'is-expanded': expandedTaskId === task.task_id, 'is-done': task.done }">
@@ -197,7 +189,6 @@ const isOverdue = (dateStr) => {
             </div>
           </div>
 
-          <!-- Details -->
           <transition name="expand">
             <div v-if="expandedTaskId === task.task_id" class="task-details">
               <div class="details-inner">
@@ -221,7 +212,7 @@ const isOverdue = (dateStr) => {
         </div>
 
         <div v-if="filteredTasks.length === 0" class="empty-state">
-          <p>Keine Aufgaben gefunden. ☕</p>
+          <p>Keine passenden Aufgaben gefunden. ☕</p>
         </div>
       </div>
     </main>
@@ -261,16 +252,44 @@ const isOverdue = (dateStr) => {
 .logo-icon { background: white; color: #6b846e; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-weight: bold; }
 .logo-text { font-weight: 700; font-size: 1.2rem; color: #1a202c; }
 
-.user-badge { display: flex; align-items: center; gap: 10px; background: rgba(255,255,255,0.2); padding: 5px 15px 5px 5px; border-radius: 20px; }
+.header-right { display: flex; align-items: center; }
+
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255,255,255,0.2);
+  padding: 5px 15px 5px 5px;
+  border-radius: 20px;
+}
 .user-avatar { width: 30px; height: 30px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #6b846e; }
 .user-name { font-weight: 600; font-size: 0.9rem; }
-.logout-link { background: none; border: none; font-size: 0.85rem; cursor: pointer; color: #1a202c; text-decoration: underline; }
+
+.btn-logout {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #1a202c;
+  padding: 6px 15px;
+  border-radius: 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 15px;
+}
+
+.btn-logout:hover {
+  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+}
 
 .main-content { max-width: 900px; margin: 40px auto; padding: 0 20px; }
 
 .btn-add {
   background: #6b846e; color: white; border: none; padding: 12px 24px; border-radius: 12px;
   font-weight: 600; cursor: pointer; margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(107, 132, 110, 0.2);
 }
 
 .filter-card {
@@ -278,9 +297,9 @@ const isOverdue = (dateStr) => {
   box-shadow: 0 2px 15px rgba(0,0,0,0.04);
 }
 .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; }
-.filter-group label { display: block; font-size: 0.7rem; font-weight: 700; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
+.filter-group label { display: block; font-size: 0.65rem; font-weight: 700; color: #a0aec0; text-transform: uppercase; margin-bottom: 8px; }
 .filter-group select {
-  width: 100%; border: 1.5px solid #edf2f7; background: #f8fafc; padding: 10px; border-radius: 10px; outline: none;
+  width: 100%; border: 1.5px solid #edf2f7; background: #f8fafc; padding: 10px; border-radius: 10px; outline: none; font-weight: 600;
 }
 
 /* Switch Style */
@@ -292,8 +311,8 @@ input:checked + .slider { background-color: #8fb99c; }
 input:checked + .slider:before { transform: translateX(20px); }
 
 .task-container { display: flex; flex-direction: column; gap: 12px; }
-.task-card { background: white; border-radius: 14px; border: 1px solid #edf2f0; cursor: pointer; overflow: hidden; }
-.task-card:hover { border-color: #8fb99c; }
+.task-card { background: white; border-radius: 14px; border: 1px solid #edf2f0; cursor: pointer; overflow: hidden; transition: 0.2s; }
+.task-card:hover { border-color: #8fb99c; transform: translateX(4px); }
 
 .task-main-row { display: flex; justify-content: space-between; align-items: center; padding: 18px 24px; }
 .task-left { display: flex; align-items: center; gap: 15px; }
@@ -305,7 +324,7 @@ input:checked + .slider:before { transform: translateX(20px); }
 .task-date.overdue { color: #e53e3e; }
 
 .priority-indicator { width: 12px; height: 12px; border-radius: 50%; }
-.priority-indicator.high { background: #fc8181; }
+.priority-indicator.high { background: #fc8181; box-shadow: 0 0 8px rgba(252, 129, 129, 0.4); }
 .priority-indicator.medium { background: #fbd38d; }
 .priority-indicator.low { background: #9ae6b4; }
 
@@ -315,16 +334,16 @@ input:checked + .slider:before { transform: translateX(20px); }
 .task-details { background: #fafcfb; border-top: 1px solid #edf2f0; }
 .details-inner { padding: 20px 24px; display: grid; grid-template-columns: 1fr 2fr 150px; gap: 30px; }
 .detail-label { display: block; font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #a0aec0; }
-.detail-value { font-weight: 600; }
-.detail-desc { font-size: 0.9rem; color: #718096; margin: 0; }
+.detail-value { font-weight: 600; font-size: 0.9rem; }
+.detail-desc { font-size: 0.9rem; color: #718096; margin: 0; line-height: 1.5; }
 
 .actions { display: flex; flex-direction: column; gap: 10px; }
-.btn-edit { background: #ebf4ef; color: #4a5d4c; border: none; padding: 8px; border-radius: 8px; cursor: pointer; }
-.btn-delete { background: #fff5f5; color: #c53030; border: none; padding: 8px; border-radius: 8px; cursor: pointer; }
+.btn-edit { background: #ebf4ef; color: #4a5d4c; border: none; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+.btn-delete { background: #fff5f5; color: #c53030; border: none; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: 600; }
 
 .custom-checkbox { width: 20px; height: 20px; accent-color: #8fb99c; cursor: pointer; }
-.empty-state { text-align: center; padding: 40px; color: #a0aec0; }
+.empty-state { text-align: center; padding: 40px; color: #a0aec0; font-style: italic; }
 
-.expand-enter-active, .expand-leave-active { transition: all 0.3s ease; max-height: 300px; }
+.expand-enter-active, .expand-leave-active { transition: all 0.3s ease; max-height: 400px; }
 .expand-enter-from, .expand-leave-to { max-height: 0; opacity: 0; }
 </style>
